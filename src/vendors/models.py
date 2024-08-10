@@ -38,3 +38,12 @@ class Manager(Staff):
         self.is_manager = True
         self.user.is_staff = True
         return super(Owner, self).save(*args, **kwargs)
+
+class Operator(Staff):
+    class Meta:
+        proxy = True
+    
+    def save(self, *args, **kwargs):
+        self.is_operator = True
+        self.user.is_staff = True
+        return super(Owner, self).save(*args, **kwargs)
