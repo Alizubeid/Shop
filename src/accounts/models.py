@@ -29,13 +29,60 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_customer = models.BooleanField(default=False)
     is_owner = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
-    date_joined = models.DateTimeField(default=timezone.now())
-    date_login = models.DateTimeField(blank=True, null=True)
-
-    # customiz fields
+    date_joined = models.DateTimeField(blank=True, default=timezone.now())
+    date_login = models.DateTimeField(null=True)
     USERNAME_FIELD = "email"
     EMIAL_FIELD = "email"
     REQUIRED_FIELDS = []
-
-    # where creation object
     objects = CreateUserManager()
+
+
+class Profile(models.Model):
+    class Demography:
+        """
+        people category
+        """
+
+        class AgeCategory(models.TextChoices):
+            A = "A", "3 to 7"
+            B = "B", "7 to 12"
+            C = "C", "12 to 18"
+            D = "D", "18 to 30"
+            E = "E", "30 to 40"
+            F = "F", "40 to 60"
+            G = "G", "+60"
+
+        class Gender(models.TextChoices):
+            M = "M", "Male"
+            F = "F", "Female"
+
+    first_name = models.CharField(max_length=64)
+    last_name = models.CharField(max_length=64)
+    birth = models.DateField()
+    gender = models.CharField(choices=Demography.Gender.choices)
+
+    @property
+    def age(self):
+        return timezone.now().year - self.birth.year
+
+    @property
+    def age_category_checker(self, categoires=Demography.AgeCategory):
+        age = self.age
+        if 3 >= age > 7:
+            return categoires.A
+        elif 7 >= age > 12:
+            return categoires.B
+        elif 12 >= age > 18:
+            return categoires.C
+        elif 18 >= age > 30:
+            return categoires.D
+        elif 30 >= age > 40:
+            return categoires.E
+        elif 40 >= age > 60:
+            return categoires.F
+        elif 60 > age:
+            return categoires.G
+
+    age_category = models.CharField(
+        choices=Demography.AgeCategory.choices, default=age_category_checker
+    )
