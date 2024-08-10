@@ -38,6 +38,10 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 class Profile(models.Model):
+    """
+    any User can have profile details
+    """
+
     class Demography:
         """
         people category
@@ -86,3 +90,4 @@ class Profile(models.Model):
     age_category = models.CharField(
         choices=Demography.AgeCategory.choices, default=age_category_checker
     )
+    user = models.ForeignKey(User, on_delete=models.CASCADE, unique=True)
