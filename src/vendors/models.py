@@ -16,6 +16,11 @@ class Company(models.Model):
     company_name = models.CharField(max_length=255)
     desciption = models.TextField()
 
-
+class Companies(models.Model):
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    address = models.ForeignKey(Address, on_delete=models.CASCADE)
+    phone_number = models.CharField(max_length=64)
+    is_main = models.BooleanField(default=False)
+    descripton = models.TextField()
 
 
