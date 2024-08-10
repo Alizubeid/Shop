@@ -30,3 +30,11 @@ class Staff(models.Model):
     is_operator = models.BooleanField(default=False)
     company = models.ForeignKey(Companies,on_delete=models.CASCADE)
 
+class Manager(Staff):
+    class Meta:
+        proxy = True
+    
+    def save(self, *args, **kwargs):
+        self.is_manager = True
+        self.user.is_staff = True
+        return super(Owner, self).save(*args, **kwargs)
