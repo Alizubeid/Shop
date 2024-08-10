@@ -8,6 +8,7 @@ class Owner(User):
 
     def save(self, *args, **kwargs):
         self.is_owner = True
+        self.is_staff = True
         return super(Owner, self).save(*args, **kwargs)
 
 
@@ -23,4 +24,9 @@ class Companies(models.Model):
     is_main = models.BooleanField(default=False)
     descripton = models.TextField()
 
+class Staff(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    is_manager = models.BooleanField(default=False)
+    is_operator = models.BooleanField(default=False)
+    company = models.ForeignKey(Companies,on_delete=models.CASCADE)
 
