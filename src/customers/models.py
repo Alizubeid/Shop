@@ -1,3 +1,10 @@
 from django.db import models
 
-# Create your models here.
+from accounts.models import User
+
+class Customer(User):
+    class Meta:
+        proxy = True
+
+    def save(self, *args, **kwargs):
+        self.is_customer = True
