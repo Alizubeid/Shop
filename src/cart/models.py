@@ -33,3 +33,9 @@ class Discount(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE,null=True)
     amount = models.PositiveIntegerField(null=True)
     percent = models.PositiveIntegerField(null=True)
+
+class Cart(models.Model):
+    customer = models.ForeignKey(User, on_delete=models.CASCADE,null=True)
+    total_amount = models.PositiveIntegerField(default=0)
+    date = models.DateField()
+    is_paid = models.BooleanField(default=False)
