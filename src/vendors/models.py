@@ -11,9 +11,11 @@ class Owner(User):
         return super(Owner, self).save(*args, **kwargs)
 
 
-class Vendor(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+class Company(models.Model):
+    owner = models.ForeignKey(Owner, on_delete=models.CASCADE)
     company_name = models.CharField(max_length=255)
     desciption = models.TextField()
+
+
 
 
