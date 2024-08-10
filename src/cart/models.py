@@ -12,3 +12,12 @@ class Product(models.Model):
 class Category(models.Model):
     category = models.CharField(max_length=64)
     sub_category = models.ForeignKey("self",null=True,on_delete=models.CASCADE)
+
+class Property(models.model):
+    property_field = models.CharField(max_length=64)
+
+class ProductProperties(models.Model):
+    product = models.ForeignKey(Product,on_delete=models.CASCADE)
+    property_field = models.ForeignKey(Property,on_delete=models.CASCADE)
+
+
