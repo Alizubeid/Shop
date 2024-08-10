@@ -93,3 +93,11 @@ class Profile(models.Model):
     )
     user = models.ForeignKey(User, on_delete=models.CASCADE, unique=True)
 
+
+class Address(models.Model):
+    country = models.CharField(max_length=64)
+    state = models.CharField(max_length=64)
+    city = models.CharField(max_length=64)
+    street = models.CharField(max_length=64)
+    zip_code = models.IntegerField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
