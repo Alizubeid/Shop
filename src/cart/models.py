@@ -19,5 +19,6 @@ class Property(models.model):
 class ProductProperties(models.Model):
     product = models.ForeignKey(Product,on_delete=models.CASCADE)
     property_field = models.ForeignKey(Property,on_delete=models.CASCADE)
+    value = models.CharField(max_length=64)
 
 
