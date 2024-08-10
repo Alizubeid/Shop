@@ -39,3 +39,7 @@ class Cart(models.Model):
     total_amount = models.PositiveIntegerField(default=0)
     date = models.DateField()
     is_paid = models.BooleanField(default=False)
+
+class CartItems(models.Model):
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE,null=True)
+    item = models.ForeignKey(Product, on_delete=models.CASCADE,null=True)
