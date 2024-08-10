@@ -62,6 +62,7 @@ class Profile(models.Model):
 
     first_name = models.CharField(max_length=64)
     last_name = models.CharField(max_length=64)
+    phone_number = models.CharField(max_length=13)
     birth = models.DateField()
     gender = models.CharField(choices=Demography.Gender.choices)
 
@@ -91,3 +92,4 @@ class Profile(models.Model):
         choices=Demography.AgeCategory.choices, default=age_category_checker
     )
     user = models.ForeignKey(User, on_delete=models.CASCADE, unique=True)
+
