@@ -31,7 +31,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
-    date_joined = models.DateTimeField(blank=True, default=timezone.now())
+    date_joined = models.DateTimeField(blank=True, default=timezone.now)
     date_login = models.DateTimeField(null=True)
     USERNAME_FIELD = "email"
     EMIAL_FIELD = "email"
@@ -66,7 +66,7 @@ class Profile(models.Model):
     last_name = models.CharField(max_length=64)
     phone_number = models.CharField(max_length=13)
     birth = models.DateField()
-    gender = models.CharField(choices=Demography.Gender.choices)
+    gender = models.CharField(choices=Demography.Gender.choices, max_length=1)
 
     @property
     def age(self):
@@ -91,9 +91,11 @@ class Profile(models.Model):
             return categoires.G
 
     age_category = models.CharField(
-        choices=Demography.AgeCategory.choices, default=age_category_checker
+        max_length=1,
+        choices=Demography.AgeCategory.choices,
+        default=age_category_checker,
     )
-    user = models.ForeignKey(User, on_delete=models.CASCADE, unique=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, unique=True)
 
 
 class Address(models.Model):
