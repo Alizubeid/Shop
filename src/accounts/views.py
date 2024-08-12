@@ -3,6 +3,7 @@ from django.views.generic import FormView
 from accounts.forms import SignupForm
 
 class SignUpView(FormView):
+    template_name = "accounts/signup.html"
     form_class = SignupForm
     success_url = "/"
 

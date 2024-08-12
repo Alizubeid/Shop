@@ -150,6 +150,7 @@ button{
         <div class="shape"></div>
     </div>
     <form method="post">
+        {% csrf_token %}
         <h3>SignUp</h3>
 
         <label for="Email">Email</label>
@@ -160,8 +161,7 @@ button{
 
         <label for="password2">Enter Password Again</label>
         {{ form.password2 }}
-
-        <button><input type="submit" value="SignUp"></button>
-    </form>
+        <br>
+        <input type="submit" value="SignUp">
 </body>
 </html>
