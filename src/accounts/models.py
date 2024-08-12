@@ -73,8 +73,7 @@ class Profile(models.Model):
         return timezone.now().year - self.birth.year
 
     @property
-    def age_category_checker(self, categoires=Demography.AgeCategory):
-        age = self.age
+    def age_category_checker(self, categoires=Demography.AgeCategory, age=age):
         if 3 >= age > 7:
             return categoires.A
         elif 7 >= age > 12:
@@ -90,12 +89,16 @@ class Profile(models.Model):
         elif 60 > age:
             return categoires.G
 
+    user_age = models.PositiveIntegerField()
     age_category = models.CharField(
-        max_length=1,
-        choices=Demography.AgeCategory.choices,
-        default=age_category_checker,
+        max_length=1, choices=Demography.AgeCategory.choices
     )
     user = models.OneToOneField(User, on_delete=models.CASCADE, unique=True)
+
+    def save(self, *args, **kwargs):
+        self.user_age = self.age
+        self.age_category = self.age_category_checker
+        return super(User, self).save(*args, **kwargs)
 
 
 class Address(models.Model):
