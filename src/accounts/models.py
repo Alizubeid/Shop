@@ -61,44 +61,44 @@ class Profile(models.Model):
         class Gender(models.TextChoices):
             M = "M", "Male"
             F = "F", "Female"
-
     first_name = models.CharField(max_length=64)
     last_name = models.CharField(max_length=64)
     phone_number = models.CharField(max_length=13)
     birth = models.DateField()
     gender = models.CharField(choices=Demography.Gender.choices, max_length=1)
+    image = models.ImageField(upload_to="profile/%y/%m/%d")
 
     @property
-    def age(self):
+    def _age(self):
         return timezone.now().year - self.birth.year
 
     @property
-    def age_category_checker(self, categoires=Demography.AgeCategory, age=age):
-        if 3 >= age > 7:
+    def age_category_checker(self, categoires=Demography.AgeCategory,age = int(_age)):
+        if 3 <= age < 7:
             return categoires.A
-        elif 7 >= age > 12:
+        elif 7 <= age < 12:
             return categoires.B
-        elif 12 >= age > 18:
+        elif 12 <= age < 18:
             return categoires.C
-        elif 18 >= age > 30:
+        elif 18 <= age < 30:
             return categoires.D
-        elif 30 >= age > 40:
+        elif 30 <= age < 40:
             return categoires.E
-        elif 40 >= age > 60:
+        elif 40 <= age < 60:
             return categoires.F
-        elif 60 > age:
+        elif 60 < age:
             return categoires.G
 
-    user_age = models.PositiveIntegerField()
+    user_age = models.PositiveIntegerField(blank=True)
     age_category = models.CharField(
-        max_length=1, choices=Demography.AgeCategory.choices
+        max_length=1, choices=Demography.AgeCategory.choices, blank=True
     )
     user = models.OneToOneField(User, on_delete=models.CASCADE, unique=True)
 
     def save(self, *args, **kwargs):
-        self.user_age = self.age
+        self.user_age = self._age
         self.age_category = self.age_category_checker
-        return super(User, self).save(*args, **kwargs)
+        return super(Profile, self).save(*args, **kwargs)
 
 
 class Address(models.Model):
