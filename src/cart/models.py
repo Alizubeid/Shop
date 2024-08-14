@@ -12,6 +12,8 @@ class Category(models.Model):
         related_name="category_sub_category",
     )
 
+class ProductImage(models.model):
+    image = models.ImageField(upload_to="product/%y/%m/%d/")
 
 class Product(models.Model):
     name = models.CharField(max_length=64)

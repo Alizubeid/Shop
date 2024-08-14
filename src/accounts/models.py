@@ -66,7 +66,7 @@ class Profile(models.Model):
     phone_number = models.CharField(max_length=13)
     birth = models.DateField()
     gender = models.CharField(choices=Demography.Gender.choices, max_length=1)
-    image = models.ImageField(upload_to="profile/%y/%m/%d")
+    image = models.ImageField(upload_to="profile/%y/%m/%d/")
 
     @property
     def _age(self):
