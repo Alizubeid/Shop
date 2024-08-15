@@ -1,24 +1,33 @@
 from typing import Any
+from django.db.models.base import Model as Model
+from django.db.models.query import QuerySet
 from django.shortcuts import render
-from django.views.generic import FormView
-from accounts.forms import SignupForm, ProfileForm
-from accounts.models import Profile
+from django.views.generic.detail import DetailView
+from django.views.generic.edit import CreateView, UpdateView
+from accounts.forms import SignupForm
+from accounts.models import Profile, User
 
 
-class SignUpView(FormView):
+class SignUpView(CreateView):
+    model = User
     template_name = "accounts/signup.html"
     form_class = SignupForm
-    success_url = "/"
-
-    def form_valid(self, form):
-        form.save()
-        return super().form_valid(form)
 
 
-class ProfileFormView(FormView):
-    form_class = ProfileForm
+class ProfileDetailView(DetailView):
+    model = Profile
     template_name = "index.html"
-    success_url = "/"
 
-    def get_initial(self) -> dict[str, Any]:
-        obj = Profile.objects.get(user=self.request.user)
+    def get_object(self, queryset: QuerySet[Any] | None = ...) -> Model:
+        qs = super().get_object(queryset)
+        return qs.objects.get(user=self.request.user)
+
+
+class ProfileUpdateView(UpdateView):
+    model = Profile
+    template_name = "index.html"
+
+    def get_object(self, queryset: QuerySet[Any] | None = ...) -> Model:
+        qs = super().get_object(queryset)
+        return qs.objects.get(user=self.request.user)
+
