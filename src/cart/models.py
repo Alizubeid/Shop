@@ -12,8 +12,6 @@ class Category(models.Model):
         related_name="category_sub_category",
     )
 
-class ProductImage(models.model):
-    image = models.ImageField(upload_to="product/%y/%m/%d/")
 
 class Product(models.Model):
     name = models.CharField(max_length=64)
@@ -22,6 +20,11 @@ class Product(models.Model):
     date_ex = models.DateField()
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     category = models.ManyToManyField(Category)
+
+
+class ProductImage(models.model):
+    image = models.ImageField(upload_to="product/%y/%m/%d/")
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
 
 
 class Property(models.Model):
