@@ -13,7 +13,7 @@ from accounts.models import Profile, User, Address
 
 class SignUpView(CreateView):
     model = User
-    template_name = "accounts/signup.html"
+    template_name = "base.html"
     form_class = SignupForm
 
 class ProfileCreateView(CreateView):

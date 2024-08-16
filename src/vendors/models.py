@@ -37,7 +37,7 @@ class Manager(Staff):
     def save(self, *args, **kwargs):
         self.is_manager = True
         self.user.is_staff = True
-        return super(Owner, self).save(*args, **kwargs)
+        return super(Manager, self).save(*args, **kwargs)
 
 class Operator(Staff):
     class Meta:
@@ -46,4 +46,4 @@ class Operator(Staff):
     def save(self, *args, **kwargs):
         self.is_operator = True
         self.user.is_staff = True
-        return super(Owner, self).save(*args, **kwargs)
+        return super(Operator, self).save(*args, **kwargs)

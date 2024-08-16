@@ -8,3 +8,4 @@ class Customer(User):
 
     def save(self, *args, **kwargs):
         self.is_customer = True
+        return super(Customer,self).save(*args,**kwargs)

@@ -73,7 +73,8 @@ class Profile(models.Model):
         return timezone.now().year - self.birth.year
 
     @property
-    def age_category_checker(self, categoires=Demography.AgeCategory,age = int(_age)):
+    def age_category_checker(self, categoires=Demography.AgeCategory):
+        age = int(self._age)
         if 3 <= age < 7:
             return categoires.A
         elif 7 <= age < 12:

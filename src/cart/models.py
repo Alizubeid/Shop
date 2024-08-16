@@ -22,7 +22,7 @@ class Product(models.Model):
     category = models.ManyToManyField(Category)
 
 
-class ProductImage(models.model):
+class ProductImage(models.Model):
     image = models.ImageField(upload_to="product/%y/%m/%d/")
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
 
