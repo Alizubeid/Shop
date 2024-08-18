@@ -28,7 +28,7 @@ class Staff(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE)
     is_manager = models.BooleanField(default=False)
     is_operator = models.BooleanField(default=False)
-    company = models.ForeignKey(Companies,on_delete=models.CASCADE)
+    company = models.ForeignKey(Companies,on_delete=models.CASCADE,null=True)
 
 class Manager(Staff):
     class Meta:
