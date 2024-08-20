@@ -27,5 +27,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("",  TemplateView.as_view(template_name="base.html"), name="root"),
     path("signup/",include("accounts.urls")),
+    path("api/",include("cart.api.v1.urls"))
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

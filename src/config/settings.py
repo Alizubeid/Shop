@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     "customers",
     "admin_panel",
     "cart",
-    "website"
+    "website",
+    "rest_framework"
 ]
 
 AUTH_USER_MODEL = "accounts.User"
