@@ -5,5 +5,5 @@ from .serializer import ProductSerializer
 from cart.models import Product
 
 class ProductAPIView(generics.ListAPIView):
-    queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    queryset = Product.objects.all()

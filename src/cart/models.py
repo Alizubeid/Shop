@@ -25,7 +25,7 @@ class Product(models.Model):
     category = models.ManyToManyField(Category)
 
     def add_cart(self):
-        return f"http://127.0.0.1:8000/api/add_cart/{self.pk}/"
+        return f"http://127.0.0.1:8000/cart/add_cart/{self.pk}/"
     
     def discount(self):
         obj = Discount.objects.filter(product=self).first()
@@ -77,7 +77,13 @@ class Cart(models.Model):
 class CartItems(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE,null=True)
     item = models.ForeignKey(Product, on_delete=models.CASCADE)
-    discount = models.PositiveIntegerField()
-    quntity = models.PositiveIntegerField()
-    total_amount = models.PositiveIntegerField()
-    total_amount_with_discount = models.PositiveIntegerField()
+    discount = models.PositiveIntegerField(default=0)
+    quntity = models.PositiveIntegerField(default=0)
+    total_amount = models.PositiveIntegerField(default=0)
+    total_amount_with_discount = models.PositiveIntegerField(default=0)
+
+    def add_quntity(self):
+        self.quntity+=1
+
+    def odd_quntity(self):
+        self.quntity-=1
