@@ -14,7 +14,7 @@ class Category(models.Model):
         on_delete=models.CASCADE,
         related_name="category_sub_category",
     )
-
+timezone
 
 class Product(models.Model):
     name = models.CharField(max_length=64)
@@ -65,8 +65,8 @@ class Discount(models.Model):
 class Cart(models.Model):
     customer = models.ForeignKey(User, on_delete=models.CASCADE)
     total_amount = models.PositiveIntegerField(default=0)
-    total_amount_with_discount = models.PositiveIntegerField(default=0)
-    date = models.DateField(null=True)
+    # total_amount_with_discount = models.PositiveIntegerField(default=0)
+    date = models.DateField(null=True,default=timezone.now().date)
     is_paid = models.BooleanField(default=False)
 
     def paid(self):
@@ -84,6 +84,8 @@ class CartItems(models.Model):
 
     def add_quntity(self):
         self.quntity+=1
+        self.save()
 
     def odd_quntity(self):
         self.quntity-=1
+        self.save()

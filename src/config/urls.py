@@ -20,6 +20,7 @@ from django.urls import path,include,re_path
 from django.conf.urls.static import static
 from django.conf import settings
 from django.views.generic.base import TemplateView
+from django.contrib.auth.views import LoginView,LogoutView
 
 
 
@@ -29,5 +30,7 @@ urlpatterns = [
     path("signup/",include("accounts.urls")),
     path("api/",include("cart.api.v1.urls")),
     path("cart/",include("cart.urls")),
+    path("login/",LoginView.as_view(template_name="login.html"),name="login"),
+    path("logout/",LogoutView.as_view(next_page="login"),name="logout"),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

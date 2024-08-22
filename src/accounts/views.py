@@ -11,6 +11,7 @@ from accounts.forms import SignupForm
 from accounts.models import Profile, User, Address
 
 
+
 class SignUpView(CreateView):
     model = User
     template_name = "base.html"
@@ -64,3 +65,6 @@ class AddressListView(ListView):
 class AddressUpdateView(UpdateView):
     model = Address
     fields = ["country", "state", "city", "street", "zip_code"]
+
+
+
