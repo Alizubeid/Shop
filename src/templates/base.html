@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/x-icon" href="{% static "img/gojo-fan.gif" %}">
+    <link rel="icon" type="image/x-icon" href="{% static "img/title_icon.png" %}">
     <title>KAZBAZ</title>
 
 
@@ -53,22 +53,13 @@ https://templatemo.com/tm-571-hexashop
                 <div class="col-12">
                     <nav class="main-nav">
                         <!-- ***** Logo Start ***** -->
-                        <a href="index.html" class="logo">
-                            <img src="{% static "assets/images/logo.png"%}" >
+                        <a href="{% url "root" %}" class="logo">
+                            <img src="{% static "img/title_icon.png"%}" style="height: 59px;">
                         </a>
                         <!-- ***** Logo End ***** -->
                         <!-- ***** Menu Start ***** -->
                         <ul class="nav">
-                            <li class="submenu">
-                                <a href="javascript:;">Pages</a>
-                                <ul>
-                                    <li><a href="about.html">About Us</a></li>
-                                    <li><a href="products.html">Products</a></li>
-                                    <li><a href="single-product.html">Single Product</a></li>
-                                    <li><a href="contact.html">Contact Us</a></li>
-                                </ul>
-                            </li>
-                            <li class="scroll-to-section"><a href="#top" class="active">Home&shoping</a></li>
+
                             <li class="scroll-to-section"><a href="{% url "login" %}">Login</a></li>
                             
                             <li class="submenu">
@@ -94,6 +85,7 @@ https://templatemo.com/tm-571-hexashop
     <!-- ***** Header Area End ***** -->
 
     {% block content %}
+    {% include "products.html" %}
     {% endblock content %}
 
 

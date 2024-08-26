@@ -3,7 +3,8 @@ from django.http import HttpRequest
 from django.http.response import HttpResponse
 from django.shortcuts import redirect
 from cart.models import Cart, CartItems, Product
-from django.views.generic.base import RedirectView,View
+from django.views.generic.base import View
+from django.views.generic.list import ListView
 
 
 class AddCartView(View):
@@ -35,3 +36,4 @@ class AddCartView(View):
             user_cart.save()
             order_item.save()
         return redirect("product-list-view-API")
+
