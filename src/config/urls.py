@@ -21,13 +21,13 @@ from django.conf.urls.static import static
 from django.conf import settings
 from django.views.generic.list import ListView
 from django.contrib.auth.views import LoginView,LogoutView
-from cart.models import Product
+
 
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("",  ListView.as_view(template_name="base.html",model=Product,context_object_name="products"), name="root"),
+    path("",  include("website.urls")),
     path("signup/",include("accounts.urls")),
     path("api/",include("cart.api.v1.urls")),
     path("cart/",include("cart.urls")),

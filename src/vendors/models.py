@@ -13,9 +13,12 @@ class Owner(User):
 
 
 class Company(models.Model):
-    owner = models.ForeignKey(Owner, on_delete=models.CASCADE)
-    company_name = models.CharField(max_length=255)
+    owner = models.ForeignKey(Owner, on_delete=models.DO_NOTHING)
+    company_name = models.CharField(max_length=255,unique=True)
+    images = models.ImageField("company/%y/%m/%d")
     desciption = models.TextField()
+    def __str__(self):
+        return self.company_name
 
 class Companies(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
@@ -23,12 +26,16 @@ class Companies(models.Model):
     phone_number = models.CharField(max_length=64)
     is_main = models.BooleanField(default=False)
     descripton = models.TextField()
+    def __str__(self):
+        return self.company
 
 class Staff(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE)
     is_manager = models.BooleanField(default=False)
     is_operator = models.BooleanField(default=False)
     company = models.ForeignKey(Companies,on_delete=models.CASCADE,null=True)
+    def __str__(self):
+        return self.user.email
 
 class Manager(Staff):
     class Meta:
