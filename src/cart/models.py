@@ -17,6 +17,12 @@ class Category(models.Model):
         on_delete=models.CASCADE,
         related_name="category_sub_category",
     )
+    def __str__(self):
+        return f"{self.category}"
+    
+    class Meta:
+        verbose_name = "دسته بندی"
+        verbose_name_plural = "دسته بندی ها"
 
 
 class Product(models.Model):
@@ -40,6 +46,12 @@ class Product(models.Model):
                 return f"{obj.percent}%"
         else:
             return 0
+    def __str__(self):
+        return f"{self.name} - {self.price} - {self.company} "
+    
+    class Meta:
+        verbose_name = "محصول"
+        verbose_name_plural = "محصولات"
 
 
 class ProductImage(models.Model):
@@ -50,11 +62,17 @@ class ProductImage(models.Model):
 class Property(models.Model):
     property_field = models.CharField(max_length=64)
 
+    def __str__(self):
+        return self.property_field
+
 
 class ProductProperties(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     property_field = models.ForeignKey(Property, on_delete=models.CASCADE)
     value = models.CharField(max_length=64)
+
+    def __str__(self):
+        return f"{self.product} - {self.property_field}"
 
 
 class Discount(models.Model):
@@ -64,10 +82,15 @@ class Discount(models.Model):
     category = models.ForeignKey(
         Category, on_delete=models.CASCADE, null=True, blank=True
     )
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    company = models.ForeignKey(Company,on_delete=models.CASCADE)
     amount = models.PositiveIntegerField(default=0)
     percent = models.PositiveIntegerField(default=0)
 
+    def __str__(self):
+        return f"{self.product.name or self.category.category} - {f'{self.amount}$' if self.amount else f'{self.percent}%' if {self.percent} else ''}"
+    class Meta:
+        verbose_name = "تخفیف"
+        verbose_name_plural = "تخفیفات"    
 
 class Cart(models.Model):
     customer = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -78,6 +101,9 @@ class Cart(models.Model):
 
     def paid(self):
         self.is_paid = True
+    
+    def __str__(self):
+        return f"{self.customer} - {self.total_amount}"
 
 
 class CartItems(models.Model):
@@ -95,3 +121,5 @@ class CartItems(models.Model):
     def odd_quntity(self):
         self.quntity -= 1
         self.save()
+
+    

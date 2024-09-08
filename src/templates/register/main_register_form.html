@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Form-v10 by Colorlib</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <link rel="stylesheet" type="text/css"
+    href="https://colorlib.com/etc/regform/colorlib-regform-36/css/montserrat-font.css">
+  <link rel="stylesheet" type="text/css"
+    href="https://colorlib.com/etc/regform/colorlib-regform-36/fonts/material-design-iconic-font/css/material-design-iconic-font.min.css">
+
+  <link rel="stylesheet" href="https://colorlib.com/etc/regform/colorlib-regform-36/css/style.css" />
+  <meta name="robots" content="noindex, follow">
+</head>
+
+<body class="form-v10">
+  <div class="page-content">
+    <div class="form-v10-content">
+      <form class="form-detail" action="#" method="post" id="myform">
+        {% block register_model %}
+        {% csrf_token %}
+        <div class="form-left">
+            <h2>General Infomation</h2>
+            <div class="form-row">
+                {{form.email}}
+            </div>
+            <div class="form-group">
+                <div class="form-row form-row-1">
+                  {{form.password1}}
+                </div>
+                <div class="form-row form-row-2">
+                  {{form.password2}}
+                </div>
+              </div>
+            <div class="form-group">
+              <div class="form-row form-row-1">
+                {{profile.first_name}}
+              </div>
+              <div class="form-row form-row-2">
+                {{profile.last_name}}
+              </div>
+            </div>
+            <div class="form-row">
+              {{profile.gender}}
+            </div>
+            <div class="form-row">
+                {{profile.birth}}
+            </div>
+            <div class="form-row">
+                {{profile.phone_number}}
+            </div>
+            {% block company %}
+            <div class="form-row">
+              {{ company.company_name }}
+            </div>
+            {% endblock company %}
+
+            
+          </div>
+          <div class="form-right">
+            <h2>Contact Details</h2>
+            <div class="form-row">
+                {{address.country}}
+              </div>
+              <div class="form-row">
+                {{address.state}}
+              </div>
+              <div class="form-row">
+                {{address.city}}
+              </div>
+              <div class="form-row">
+                {{address.street}}
+              </div>
+              <div class="form-row">
+                {{address.zip_code}}
+              </div>
+            <div class="form-row-last">
+              <input type="submit" name="register" class="register" value="Register Badge">
+            </div>
+          </div>
+          {% endblock register_model %}
+      </form>
+    </div>
+  </div>
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-23581568-13"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'UA-23581568-13');
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,23 @@
+{% load static %}
+<ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
+    <li class="nav-item ">
+        <a class="nav-link" href="{% url "root" %}">Home</a>
+    </li>
+    <li><a class="nav-link" href="shop.html">Shops</a></li>
+    <li><a class="nav-link" href="{% url "signup" %}">Add Personal</a></li>
+    <li><a class="nav-link" href="{% url "signup" %}">Product</a></li>
+    <li><a class="nav-link" href="{% url "signup" %}">Discount</a></li>
+
+</ul>
+
+<ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
+    <li>
+        <a class="nav-link" href="{% url "login" %}">
+            {% if user_image %}
+            <img src="{{user_image}}">
+            {% else %}
+            <img src="{% static "images/user.svg" %}">
+            {% endif %}
+        </a>
+    </li>
+</ul>

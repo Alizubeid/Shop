@@ -1,0 +1,9 @@
+{% extends "register/main_register_form.html" %}
+{% block register_model %}
+<div class="form-left">
+    <h2><a href="{% url "reg-customer" %}">Register Customer</a></h2>
+</div>
+<div class="form-right">
+   <h2> <a href="{% url "reg-owner" %}">Register Shop</a></h2>
+</div>
+{% endblock register_model %}

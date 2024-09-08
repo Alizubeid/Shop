@@ -38,6 +38,12 @@ class User(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = []
     objects = CreateUserManager()
 
+    def __str__(self):
+        return f"{self.email} {'owner' if self.is_owner else 'customer'}"
+    class Meta:
+        verbose_name = "کاریر"
+        verbose_name_plural = "کاربران"
+
 
 class Profile(models.Model):
     """
@@ -101,6 +107,13 @@ class Profile(models.Model):
         self.age_category = self.age_category_checker
         return super(Profile, self).save(*args, **kwargs)
 
+    def __str__(self):
+        return f"{self.first_name} {self.last_name} {self.user_age}"
+    
+    class Meta:
+        verbose_name = "پروفایل"
+        verbose_name_plural = "پروفایل کاربران"
+
 
 class Address(models.Model):
     country = models.CharField(max_length=64)
@@ -109,3 +122,10 @@ class Address(models.Model):
     street = models.CharField(max_length=64)
     zip_code = models.IntegerField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.country} {self.city}"
+
+    class Meta:
+        verbose_name = "آدرس"
+        verbose_name_plural = "آدرس کاربران"

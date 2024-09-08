@@ -31,7 +31,7 @@ urlpatterns = [
     path("signup/",include("accounts.urls")),
     path("api/",include("cart.api.v1.urls")),
     path("cart/",include("cart.urls")),
-    path("login/",LoginView.as_view(template_name="login.html"),name="login"),
+    path("login/",LoginView.as_view(),name="login"),
     path("logout/",LogoutView.as_view(next_page="login"),name="logout"),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

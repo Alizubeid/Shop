@@ -1,4 +1,4 @@
-**/__pycache__/
-**/.gitignore
-**/migrations/**.py
-**/venv/
+**/__pycache__/**
+.gitignore
+**/makemigrations/0*.py
+**/venv/**
