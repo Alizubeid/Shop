@@ -12,27 +12,28 @@ from accounts.models import Profile
 class NavbarUserTypeMixin(object):
     def user_type(self):
         user = self.request.user
+        image = None
         if user.is_authenticated:
-            if profile := Profile.objects.filter(user=user).first():
-                if image := profile.image:
-                    image = image.url
+            profile = Profile.objects.filter(user=user).first()
+            if profile:
+                get_image = profile.image.url
+                image = get_image
             if user.is_staff:
-                if user.is_superuser:
-                    return "goust", image
                 if user.is_owner:
                     return "owner", image
                 else:
-                    user = Staff.objects.filter(user=user).first()
-                    if user.is_manager:
-                        return "manager", image
-                    elif user.is_operator:
-                        return "operator", image
+                    staff = Staff.objects.filter(user=user).first()
+                    if staff:
+                        if staff.is_manager:
+                            return "manager", image
+                        elif staff.is_operator:
+                            return "operator", image
                     else:
-                        return "goust", False
-            else:
+                        return "goust", image
+            elif user.is_customer:
                 return "customer", image
         else:
-            return "goust", False
+            return "goust", image
 
     def get_context_data(self, **kwargs):
         context = super(NavbarUserTypeMixin, self).get_context_data(**kwargs)
@@ -54,6 +55,13 @@ class ProductListView(NavbarUserTypeMixin, ListView):
     template_name = "base.html"
     model = Product
     context_object_name = "products"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        cart = self.request.COOKIES.get("cart")
+        print(cart)
+        return context
+    
 
 
 class ProductCompanyListView(NavbarUserTypeMixin, ListView):

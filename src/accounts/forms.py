@@ -13,7 +13,7 @@ class SignupForm(UserCreationForm):
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ["first_name", "last_name", "phone_number", "birth", "gender"]
+        fields = ["first_name", "last_name", "image", "phone_number", "birth", "gender"]
 
     def __init__(self, *args, **kwargs):
         super(ProfileForm,self).__init__(*args, **kwargs)
@@ -22,6 +22,8 @@ class ProfileForm(forms.ModelForm):
         self.fields["phone_number"].widget.attrs["placeholder"] = "Phone Number"
         self.fields["gender"].widget.attrs["placeholder"] = "Gender"
         self.fields["birth"].widget.attrs["placeholder"] = "Birth Day"
+        self.fields["image"].widget.attrs["placeholder"] = "Image"
+
         
 
 class AddressForm(forms.ModelForm):

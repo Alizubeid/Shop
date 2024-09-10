@@ -13,7 +13,7 @@
     <li>
         <a class="nav-link" href="{% url "login" %}">
             {% if user_image %}
-            <img src="{{user_image}}">
+            <img src="{{user_image}}" style="vertical-align: middle;width: 38px;height: 38px;border-radius: 50%;">
             {% else %}
             <img src="{% static "images/user.svg" %}">
             {% endif %}
