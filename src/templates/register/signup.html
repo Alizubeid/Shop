@@ -1,4 +1,8 @@
 {% extends "base.html" %}
 {% block content %}
+{% if user_nav == "owner" %}
+{% include "register/manager_or_operator.html" %}
+{% elif user_nav == "customer" %}
 {% include "register/owner_or_customer.html" %}
+{% endif %}
 {% endblock content %}

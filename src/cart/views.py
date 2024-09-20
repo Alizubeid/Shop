@@ -5,7 +5,7 @@ from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from cart.models import Cart, CartItems, Product
 from django.views.generic.base import View,TemplateView
-from django.views.generic.list import ListView,CreateView
+from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView
 from vendors.models import Company,Companies,Staff
 from website.views import NavbarUserTypeMixin

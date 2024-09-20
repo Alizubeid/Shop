@@ -5,7 +5,7 @@ from django.views.generic.edit import CreateView, FormView
 from django.views.generic.list import ListView
 from django.views.generic.base import View
 from accounts.forms import ProfileForm, AddressForm
-from vendors.models import Manager, Operator, Companies
+from vendors.models import Company, Manager, Operator, Companies
 from vendors.forms import (
     OwnerCreationForm,
     ManagerCreationForm,
@@ -17,7 +17,7 @@ from accounts.models import User
 from website.views import NavbarUserTypeMixin
 
 
-class OwnerCreateView(NavbarUserTypeMixin, FormView):
+class OwnerRegisterView(NavbarUserTypeMixin, FormView):
     template_name = "register/register_owner.html"
     form_class = OwnerCreationForm
     success_url = reverse_lazy("login")
@@ -50,40 +50,53 @@ class OwnerCreateView(NavbarUserTypeMixin, FormView):
         return super().form_valid(form)
 
 
-class ManagerCreateView(FormView):
-    template_name = "signup_staff.html"
-    model = Manager
+
+
+
+
+class ManagerRegisterView(NavbarUserTypeMixin, CreateView):
+    template_name = "register/register_customer.html"
     form_class = ManagerCreationForm
-    success_url = "/"
+    success_url = reverse_lazy("login")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["form"] = self.get_form()
+        context["profile"] = ProfileForm
+        context["address"] = AddressForm
         return context
 
     def form_valid(self, form):
-        cd = form.cleaned_data
-        user = User.objects.create(email=cd.get("email"), password=cd.get("password"))
-        staff = Manager.objects.create(user=user)
-        user.save()
-        staff.save()
-        return super().form_valid(form)
+        profile = ProfileForm(self.request.POST, self.request.FILES)
+        address = AddressForm(self.request.POST)
+        if profile.is_valid() and address.is_valid():
+            form.instance.company = Company.objects.get(owner=self.request.user)
+            staff = form.save()
+            profile.instance.user = staff.user
+            profile = profile.save()
+            address.instance.user = staff.user
+            address = address.save()
+            return super().form_valid(form)
 
 
-class OperatorCreateView(FormView):
-    template_name = "signup_staff.html"
+class OperatorRegisterView(FormView):
+    template_name = "register/register_customer.html"o
     form_class = OperatorCreationForm
-    success_url = "/"
+    success_url = reverse_lazy("login")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["form"] = self.get_form()
+        context["profile"] = ProfileForm
+        context["address"] = AddressForm
         return context
 
     def form_valid(self, form):
-        cd = form.cleaned_data
-        user = User.objects.create(email=cd.get("email"), password=cd.get("password"))
-        staff = Operator.objects.create(user=user)
-        user.save()
-        staff.save()
-        return super().form_valid(form)
+        profile = ProfileForm(self.request.POST, self.request.FILES)
+        address = AddressForm(self.request.POST)
+        if profile.is_valid() and address.is_valid():
+            form.instance.company = Company.objects.get(owner=self.request.user)
+            staff = form.save()
+            profile.instance.user = staff.user
+            profile = profile.save()
+            address.instance.user = staff.user
+            address = address.save()
+            return super().form_valid(form)
