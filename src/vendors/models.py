@@ -39,7 +39,7 @@ class Staff(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE)
     is_manager = models.BooleanField(default=False)
     is_operator = models.BooleanField(default=False)
-    company = models.ForeignKey(Companies,on_delete=models.CASCADE,null=True)
+    company = models.ForeignKey(Company,on_delete=models.CASCADE,null=True)
     def __str__(self):
         return f"{self.user} {'manager' if self.is_manager else 'operator' }"
     class Meta:

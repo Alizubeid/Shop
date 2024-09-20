@@ -2,12 +2,14 @@ from typing import Any
 from django.http import HttpRequest
 from django.http.response import HttpResponse
 from django.shortcuts import redirect
+from django.urls import reverse_lazy
 from cart.models import Cart, CartItems, Product
 from django.views.generic.base import View,TemplateView
-from django.views.generic.list import ListView
-
+from django.views.generic.list import ListView,CreateView
+from django.views.generic.edit import CreateView
 from vendors.models import Company,Companies,Staff
-
+from website.views import NavbarUserTypeMixin
+from .forms import AddProductForm
 
 class AddCartView(View):
 
@@ -63,3 +65,14 @@ class CompanyCartHistory(TemplateView):
         context = super().get_context_data(**kwargs)
         context["company"] = self.get_queryset()
         return context
+
+class AddProductView(NavbarUserTypeMixin,CreateView):
+    template_name = "product/add_product.html"
+    form_class = AddProductForm
+    success_url = reverse_lazy("root")
+
+    def form_valid(self, form):
+        user = self.request.user
+        form.instance.company = Company.objects.get(owner=user)
+        return super().form_valid(form)
+    
