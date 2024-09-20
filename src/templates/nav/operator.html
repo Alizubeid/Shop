@@ -3,9 +3,6 @@
     <li class="nav-item ">
         <a class="nav-link" href="{% url "root" %}">Home</a>
     </li>
-    <li><a class="nav-link" href="shop.html">Shops</a></li>
-    <li><a class="nav-link" href="{% url "signup" %}">Add Personal</a></li>
-    <li><a class="nav-link" href="{% url "signup" %}">Product</a></li>
     <li><a class="nav-link" href="{% url "signup" %}">Discount</a></li>
 
 </ul>
@@ -20,4 +17,11 @@
             {% endif %}
         </a>
     </li>
+    <li><div class="nav-link">
+        <form action="{% url "logout" %}" method="post">
+            {% csrf_token %}
+            <button class="icon-cross" type="submit" ><img src="{% static "images/out.svg" %}"></button>
+        </form>
+        
+    </div></li>
 </ul>

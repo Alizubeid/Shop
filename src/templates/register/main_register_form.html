@@ -21,8 +21,8 @@
   <div class="page-content">
     <div class="form-v10-content">
       <form enctype="multipart/form-data" class="form-detail" action="" method="post" id="myform">
-        {% block register_model %}
         {% csrf_token %}
+        {% block register_model %}
         <div class="form-left">
             <h2>General Infomation</h2>
             <div class="form-row">

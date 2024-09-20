@@ -6,7 +6,7 @@ from django.urls import reverse_lazy
 from cart.models import Cart, CartItems, Product
 from django.views.generic.base import View,TemplateView
 from django.views.generic.list import ListView
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView,UpdateView
 from vendors.models import Company,Companies,Staff
 from website.views import NavbarUserTypeMixin
 from .forms import AddProductForm
@@ -67,7 +67,7 @@ class CompanyCartHistory(TemplateView):
         return context
 
 class AddProductView(NavbarUserTypeMixin,CreateView):
-    template_name = "product/add_product.html"
+    template_name = "products/add_product.html"
     form_class = AddProductForm
     success_url = reverse_lazy("root")
 
@@ -75,4 +75,9 @@ class AddProductView(NavbarUserTypeMixin,CreateView):
         user = self.request.user
         form.instance.company = Company.objects.get(owner=user)
         return super().form_valid(form)
-    
+
+class UpdateProductView(NavbarUserTypeMixin,UpdateView):
+    template_name = "products/add_product.html"
+    form_class = AddProductForm
+    model = Product
+    success_url = reverse_lazy("root")

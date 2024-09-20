@@ -8,9 +8,8 @@ from accounts.forms import ProfileForm, AddressForm
 from vendors.models import Company, Manager, Operator, Companies
 from vendors.forms import (
     OwnerCreationForm,
-    ManagerCreationForm,
-    OperatorCreationForm,
     CompanyCreationForm,
+    StaffCreationForm,
 )
 from shapeshifter.views import MultiFormView
 from accounts.models import User
@@ -56,7 +55,7 @@ class OwnerRegisterView(NavbarUserTypeMixin, FormView):
 
 class ManagerRegisterView(NavbarUserTypeMixin, CreateView):
     template_name = "register/register_customer.html"
-    form_class = ManagerCreationForm
+    form_class = StaffCreationForm
     success_url = reverse_lazy("login")
 
     def get_context_data(self, **kwargs):
@@ -69,18 +68,17 @@ class ManagerRegisterView(NavbarUserTypeMixin, CreateView):
         profile = ProfileForm(self.request.POST, self.request.FILES)
         address = AddressForm(self.request.POST)
         if profile.is_valid() and address.is_valid():
-            form.instance.company = Company.objects.get(owner=self.request.user)
-            staff = form.save()
-            profile.instance.user = staff.user
+            user = form.save()
+            Manager.objects.create(user=user,company=Company.objects.get(owner=self.request.user)).save()
+            profile.instance.user = user
             profile = profile.save()
-            address.instance.user = staff.user
+            address.instance.user = user
             address = address.save()
             return super().form_valid(form)
 
-
-class OperatorRegisterView(FormView):
-    template_name = "register/register_customer.html"o
-    form_class = OperatorCreationForm
+class OperatorRegisterView(NavbarUserTypeMixin,CreateView):
+    template_name = "register/register_customer.html"
+    form_class = StaffCreationForm
     success_url = reverse_lazy("login")
 
     def get_context_data(self, **kwargs):
@@ -93,10 +91,10 @@ class OperatorRegisterView(FormView):
         profile = ProfileForm(self.request.POST, self.request.FILES)
         address = AddressForm(self.request.POST)
         if profile.is_valid() and address.is_valid():
-            form.instance.company = Company.objects.get(owner=self.request.user)
-            staff = form.save()
-            profile.instance.user = staff.user
+            user = form.save()
+            Operator.objects.create(user=user,company=Company.objects.get(owner=self.request.user)).save()
+            profile.instance.user = user
             profile = profile.save()
-            address.instance.user = staff.user
+            address.instance.user = user
             address = address.save()
             return super().form_valid(form)

@@ -28,9 +28,9 @@ class ProfileCreateView(CreateView):
 
 class ProfileDetailView(DetailView):
     model = Profile
-    template_name = "index.html"
+    template_name = "profile_profile_view.html"
 
-    def get_object(self, queryset: QuerySet[Any] | None = ...) -> Model:
+    def get_object(self, queryset: QuerySet[Any] | None = ...):
         qs = super().get_object(queryset)
         return qs.objects.get(user=self.request.user)
 

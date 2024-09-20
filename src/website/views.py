@@ -6,7 +6,7 @@ from django.contrib.auth.views import LoginView, LogoutView
 from vendors.models import Company
 from cart.models import Product
 from vendors.models import Staff
-from accounts.models import Profile
+from accounts.models import Address, Profile
 
 
 class NavbarUserTypeMixin(object):
@@ -56,11 +56,11 @@ class ProductListView(NavbarUserTypeMixin, ListView):
     model = Product
     context_object_name = "products"
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        cart = self.request.COOKIES.get("cart")
-        print(cart)
-        return context
+    def get_queryset(self):
+        qs = super().get_queryset()
+        return qs.filter(company=Company.objects.get(owner=self.request.user))
+        
+    
     
 
 
@@ -79,3 +79,18 @@ class CompanyListView(NavbarUserTypeMixin, ListView):
     template_name = "shops.html"
     queryset = Company.objects.all()
     context_object_name = "shops"
+
+class ProfileUserView(NavbarUserTypeMixin,TemplateView):
+    template_name = "profile/profile_view.html"
+
+
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        profile = Profile.objects.get(user=user)
+        address = Address.objects.filter(user=user).first()
+        context["address"] = f"{address.country.upper()}, {address.state.upper()}, {address.city}"
+        context["profile"] = profile
+        return context
+    
