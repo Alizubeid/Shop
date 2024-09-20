@@ -38,7 +38,6 @@ class NavbarUserTypeMixin(object):
     def get_context_data(self, **kwargs):
         context = super(NavbarUserTypeMixin, self).get_context_data(**kwargs)
         context["user_nav"], context["user_image"] = self.user_type()
-        print(self.user_type())
         return context
 
 
@@ -58,7 +57,12 @@ class ProductListView(NavbarUserTypeMixin, ListView):
 
     def get_queryset(self):
         qs = super().get_queryset()
-        return qs.filter(company=Company.objects.get(owner=self.request.user))
+        user = self.request.user
+        if user.is_authenticated:
+            if user.is_owner:
+                return qs.filter(company=Company.objects.get(owner=user))
+        else:
+            return qs
         
     
     
