@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     ### my apps ###
-    "betterforms",
     "accounts",
     "vendors",
     "customers",

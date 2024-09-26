@@ -7,6 +7,8 @@ from vendors.models import Company
 from cart.models import Product
 from vendors.models import Staff
 from accounts.models import Address, Profile
+from .utils import ProductFilter
+from django_filters.views import FilterView
 
 
 class NavbarUserTypeMixin(object):
@@ -50,10 +52,11 @@ class UserLoginView(NavbarUserTypeMixin, LoginView):
     redirect_authenticated_user = reverse_lazy("root")
 
 
-class ProductListView(NavbarUserTypeMixin, ListView):
+class ProductListView(NavbarUserTypeMixin, FilterView):
     template_name = "base.html"
     model = Product
     context_object_name = "products"
+    filterset_class = ProductFilter
 
     def get_queryset(self):
         qs = super().get_queryset()
@@ -61,11 +64,7 @@ class ProductListView(NavbarUserTypeMixin, ListView):
         if user.is_authenticated:
             if user.is_owner:
                 return qs.filter(company=Company.objects.get(owner=user))
-        else:
-            return qs
-        
-    
-    
+        return qs
 
 
 class ProductCompanyListView(NavbarUserTypeMixin, ListView):
@@ -84,17 +83,17 @@ class CompanyListView(NavbarUserTypeMixin, ListView):
     queryset = Company.objects.all()
     context_object_name = "shops"
 
-class ProfileUserView(NavbarUserTypeMixin,TemplateView):
+
+class ProfileUserView(NavbarUserTypeMixin, TemplateView):
     template_name = "profile/profile_view.html"
-
-
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user = self.request.user
         profile = Profile.objects.get(user=user)
         address = Address.objects.filter(user=user).first()
-        context["address"] = f"{address.country.upper()}, {address.state.upper()}, {address.city}"
+        context["address"] = (
+            f"{address.country.upper()}, {address.state.upper()}, {address.city}"
+        )
         context["profile"] = profile
         return context
-    

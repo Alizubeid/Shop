@@ -120,4 +120,3 @@ class CartItems(models.Model):
         self.quntity -= 1
         self.save()
 
-    

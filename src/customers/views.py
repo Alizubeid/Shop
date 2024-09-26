@@ -21,10 +21,12 @@ class CustomerRegisterView(NavbarUserTypeMixin, CreateView):
     def form_valid(self, form):
         profile = ProfileForm(self.request.POST, self.request.FILES)
         address = AddressForm(self.request.POST)
+        if profile.is_valid():
+            print("true")
         if profile.is_valid() and address.is_valid():
             user = form.save()
             profile.instance.user = user
             profile = profile.save()
             address.instance.user = user
             address = address.save()
-            return super().form_valid(form)
+        return super().form_valid(form)

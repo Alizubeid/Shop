@@ -11,7 +11,6 @@ from vendors.forms import (
     CompanyCreationForm,
     StaffCreationForm,
 )
-from shapeshifter.views import MultiFormView
 from accounts.models import User
 from website.views import NavbarUserTypeMixin
 

@@ -48,7 +48,23 @@
     </nav>
     <!-- End Header/Navigation -->
 {% block content %}
+<div class="row my-5 mx-3">
+    <div class="col">
+        <div class="card">
+            <form method="get" action="">
+            <h5 class="card-header">Filters</h5>
+            <div class="card-body">
+                {{ filter.form.as_p }}
+            </div>
+            <div class="card-footer text-center">
+                <input class="btn btn-secondary" type="submit" value="Filter" />
+            </div>
+        </form>
+        </div>
+    </div>
+</div>
 {% if products %}
+
 
 <div class="untree_co-section product-section before-footer-section">
     <div class="container">
