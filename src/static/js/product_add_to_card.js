@@ -27,8 +27,13 @@ function addToCard(Product_ID){
         let get_product = data[`${Product_ID}`];
         if (get_product){
             data[`${Product_ID}`]++;
-            console.log(data);
             setCookie("cart",JSON.stringify(data));
+            let price = document.getElementById(`product_${Product_ID}_amount`).innerHTML;
+            let total = data[`${Product_ID}`] * price;
+            document.getElementById(`product_${Product_ID}_total`).innerHTML = total;
+            document.getElementById("total_match").innerHTML = document.getElementById("total_match").innerHTML + price;
+
+
         }
         else{
             data[`${Product_ID}`] = 1;
@@ -36,3 +41,39 @@ function addToCard(Product_ID){
         }
     }
 }
+
+function oddToCard(Product_ID){
+    let cart = getCookie("cart");
+    if (cart == ""){
+        
+    }
+    else{
+        let data = JSON.parse(cart);
+        if (data[`${Product_ID}`] > 0){
+            data[`${Product_ID}`]--;
+            let price = document.getElementById(`product_${Product_ID}_amount`).innerHTML;
+            let total = data[`${Product_ID}`] * price;
+            document.getElementById(`product_${Product_ID}_total`).innerHTML = total;
+            document.getElementById("total_match").innerHTML = document.getElementById("total_match").innerHTML - price;
+
+            if (data[`${Product_ID}`] < 1){
+                delete data[`${Product_ID}`]
+            }
+            setCookie("cart",JSON.stringify(data));
+        }
+    }
+}
+
+let cart = getCookie("cart");
+let data = JSON.parse(cart);
+if (cart != "" ){
+    for (var product in data){
+        document.getElementById(`product_${product}`).value = data[product];
+        let price = document.getElementById(`product_${product}_amount`).innerHTML;
+        let total = document.getElementById(`product_${product}`).value * price;
+        document.getElementById(`product_${product}_total`).innerHTML = total;
+        document.getElementById("total_match").innerHTML = document.getElementById("total_match").innerHTML + total;
+        
+    }
+}
+

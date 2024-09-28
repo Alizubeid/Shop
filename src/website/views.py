@@ -9,37 +9,72 @@ from vendors.models import Staff
 from accounts.models import Address, Profile
 from .utils import ProductFilter
 from django_filters.views import FilterView
+from accounts.models import User
 
 
 class NavbarUserTypeMixin(object):
-    def user_type(self):
-        user = self.request.user
-        image = None
-        if user.is_authenticated:
-            profile = Profile.objects.filter(user=user).first()
-            if profile:
-                get_image = profile.image.url
-                image = get_image
-            if user.is_staff:
-                if user.is_owner:
-                    return "owner", image
-                else:
-                    staff = Staff.objects.filter(user=user).first()
-                    if staff:
-                        if staff.is_manager:
-                            return "manager", image
-                        elif staff.is_operator:
-                            return "operator", image
-                    else:
-                        return "goust", image
-            elif user.is_customer:
-                return "customer", image
-        else:
-            return "goust", image
+    user = None
+    class UserType:
+        def __init__(self, user: User):
+            self.user = user
+            self._company = None
+            self.profile = None
+            self._user_type = None
 
+        def get_image_profile(self):
+            if self.user_type != "goust":
+                self.profile = Profile.objects.get(user=self.user).image.url
+                return self.profile
+
+        def get_user_type_and_fix_staff(self):
+            if self.user.is_authenticated:
+                if self.user.is_staff:
+                    if self.user.is_owner:
+                        self._user_type = "owner"
+                        self._company = Company.objects.get(owner=self.user)
+                    else:
+                        staff = Staff.objects.get(user=self.user)
+                        self._company = staff.company
+                        if staff.is_manager:
+                            self._user_type = "manager"
+                        elif staff.is_operator:
+                            self._user_type = "operator"
+                elif self.user.is_customer:
+                    self._user_type = "customer"
+            else:
+                self._user_type = "goust"
+            return self._user_type
+
+        @property
+        def image(self):
+            return self.profile
+
+        @property
+        def user_type(self):
+            return self._user_type
+        
+        @property
+        def company(self):
+            return self._company
+        
+        @property
+        def products(self):
+            if self.company:
+                return Product.objects.filter(company=self.company)
+
+        def validate(self):
+            self.get_user_type_and_fix_staff()
+            self.get_image_profile()
+            return self
+    
+    def get_user(self):
+        self.user = self.UserType(self.request.user).validate()
+        return self.user
+    
     def get_context_data(self, **kwargs):
         context = super(NavbarUserTypeMixin, self).get_context_data(**kwargs)
-        context["user_nav"], context["user_image"] = self.user_type()
+        user = self.get_user()
+        context["user_nav"], context["user_image"] = user.user_type, user.image
         return context
 
 
@@ -60,11 +95,11 @@ class ProductListView(NavbarUserTypeMixin, FilterView):
 
     def get_queryset(self):
         qs = super().get_queryset()
-        user = self.request.user
-        if user.is_authenticated:
-            if user.is_owner:
-                return qs.filter(company=Company.objects.get(owner=user))
+        if products:=self.get_user().products:
+            return products
+        
         return qs
+        
 
 
 class ProductCompanyListView(NavbarUserTypeMixin, ListView):

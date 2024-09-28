@@ -32,24 +32,22 @@ class Product(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     category = models.ManyToManyField(Category)
 
-    def add_cart(self):
-        return f"http://127.0.0.1:8000/cart/add_cart/{self.pk}/"
 
     def discount(self):
-        obj = Discount.objects.filter(product=self).first()
-        if obj:
-            if obj.amount > 0:
-                return f"{obj.amount}$"
-            elif obj.percent > 0:
-                return f"{obj.percent}%"
-        else:
-            return 0
-    def __str__(self):
-        return f"{self.name} - {self.price} - {self.company} "
+        if dis:=Discount.objects.filter(product=self):
+            discount = dis.first()
+            if dis:=discount.amount>0:
+                return (self.price - dis)
+            elif dis:=discount.percent>0:
+                return (self.price * dis / 100)
     
     class Meta:
         verbose_name = "محصول"
         verbose_name_plural = "محصولات"
+
+    def __str__(self):
+        return self.name
+
 
 
 class ProductImage(models.Model):
@@ -81,9 +79,9 @@ class Discount(models.Model):
         Category, on_delete=models.CASCADE, null=True, blank=True
     )
     company = models.ForeignKey(Company,on_delete=models.CASCADE)
-    amount = models.PositiveIntegerField(default=0)
-    percent = models.PositiveIntegerField(default=0)
-
+    amount = models.PositiveIntegerField(default=0,null=True)
+    percent = models.PositiveIntegerField(default=0,null=True)
+    
     def __str__(self):
         return f"{self.product.name or self.category.category} - {f'{self.amount}$' if self.amount else f'{self.percent}%' if {self.percent} else ''}"
     class Meta:
