@@ -148,4 +148,6 @@ class ProductItemView(NavbarUserTypeMixin,ListView):
         cart = self.request.COOKIES.get("cart")
         if cart:
             return qs.filter(pk__in=[int(pk) for pk in json.loads(cart)])
-        
+
+class ThankYouView(NavbarUserTypeMixin,TemplateView):
+    template_name = "thankyou.html"

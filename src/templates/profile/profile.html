@@ -21,6 +21,9 @@
               <h5 class="my-3">{{profile.first_name}} {{profile.last_name}}</h5>
               <p class="text-muted mb-1">{{user_nav}}</p>
               <p class="text-muted mb-4">{{address}}</p>
+              <a class="btn btn-primary" href="{% url "update_profile" %}">
+                Edit Profile            
+              </a>
             </div>
           </div>
           {% comment %} <div class="card mb-4 mb-lg-0">
@@ -85,7 +88,10 @@
                   <p class="mb-0">Address</p>
                 </div>
                 <div class="col-sm-9">
-                  <p class="text-muted mb-0">{{address}}</p>
+                  <p class="text-muted mb-0">{{address}}
+                    <a class="btn btn-primary" href="{% url "update_address" %}">
+                    Edit Address     
+                  </a></p>
                 </div>
               </div>
             </div>
@@ -158,6 +164,7 @@
               </div>
             </div>
           </div> {% endcomment %}
+
         </div>
       </div>
     </div>

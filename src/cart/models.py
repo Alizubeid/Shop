@@ -1,11 +1,9 @@
+from datetime import datetime
 from django.db import models
 from vendors.models import Company
 from accounts.models import User
 from django.utils import timezone
 
-
-def today():
-    return timezone.now().date
 
 
 class Category(models.Model):
@@ -89,11 +87,18 @@ class Discount(models.Model):
         verbose_name_plural = "تخفیفات"    
 
 class Cart(models.Model):
+    Status=[
+        (1,"in progress"),
+        (2,"confirmed"),
+        (3,"SEND")
+    ]
+        
+
     customer = models.ForeignKey(User, on_delete=models.CASCADE)
-    total_amount = models.PositiveIntegerField(default=0)
+    total_amount = models.PositiveIntegerField(default=0,null=True)
     # total_amount_with_discount = models.PositiveIntegerField(default=0)
-    date = models.DateField(null=True, default=today)
-    is_paid = models.BooleanField(default=False)
+    date = models.DateTimeField(default=timezone.now,null=True)
+    status = models.CharField(max_length=64,choices=Status,default=1)
 
     def paid(self):
         self.is_paid = True
@@ -103,18 +108,14 @@ class Cart(models.Model):
 
 
 class CartItems(models.Model):
-    cart = models.ForeignKey(Cart, on_delete=models.CASCADE, null=True)
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
     item = models.ForeignKey(Product, on_delete=models.CASCADE)
-    discount = models.PositiveIntegerField(default=0)
-    quntity = models.PositiveIntegerField(default=0)
-    total_amount = models.PositiveIntegerField(default=0)
-    total_amount_with_discount = models.PositiveIntegerField(default=0)
+    quntity = models.PositiveIntegerField(default=0,null=True)
+    total_amount = models.PositiveIntegerField(default=0,null=True)
+    
+    def save(self, *args, **kwargs):
+        self.total_amount = self.item.price * self.quntity
+        self.cart.total_amount + self.total_amount
 
-    def add_quntity(self):
-        self.quntity += 1
-        self.save()
 
-    def odd_quntity(self):
-        self.quntity -= 1
-        self.save()
 

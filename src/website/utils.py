@@ -5,4 +5,4 @@ from django_filters import FilterSet
 class ProductFilter(FilterSet):
     class Meta:
         model = Product
-        fields = ["name","company"]
+        fields = ["name","company","category"]

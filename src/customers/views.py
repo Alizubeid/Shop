@@ -1,8 +1,9 @@
 from typing import Any
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView,UpdateView
 from accounts.forms import AddressForm, ProfileForm
+from accounts.models import Address, Profile
 from customers.forms import RegisterForm
 from website.views import NavbarUserTypeMixin
 
@@ -30,3 +31,4 @@ class CustomerRegisterView(NavbarUserTypeMixin, CreateView):
             address.instance.user = user
             address = address.save()
         return super().form_valid(form)
+    
