@@ -98,11 +98,9 @@ class Cart(models.Model):
     total_amount = models.PositiveIntegerField(default=0,null=True)
     # total_amount_with_discount = models.PositiveIntegerField(default=0)
     date = models.DateTimeField(default=timezone.now,null=True)
-    status = models.CharField(max_length=64,choices=Status,default=1)
+    status = models.CharField(max_length=64,choices=Status,default=1,null=True)
 
-    def paid(self):
-        self.is_paid = True
-    
+
     def __str__(self):
         return f"{self.customer} - {self.total_amount}"
 
@@ -110,12 +108,15 @@ class Cart(models.Model):
 class CartItems(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
     item = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quntity = models.PositiveIntegerField(default=0,null=True)
+    quntity = models.PositiveIntegerField(null=True)
     total_amount = models.PositiveIntegerField(default=0,null=True)
     
     def save(self, *args, **kwargs):
         self.total_amount = self.item.price * self.quntity
         self.cart.total_amount + self.total_amount
+
+    def __str__(self):
+        return f"{self.cart} ~ {self.item} ~ {self.quntity} ~ {self.total_amount}"
 
 
 
