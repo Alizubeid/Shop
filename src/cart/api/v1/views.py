@@ -21,6 +21,7 @@ class CheckOutCart(NavbarUserTypeMixin, APIView):
             if data:
                 data_parse = dict(json.loads(data))
                 cart = Cart.objects.create(customer=self.request.user)
+                cart.save()
                 print(cart)
                 for product, quntity in data_parse.items():
                     product_obj = Product.objects.get(pk=int(product))
@@ -30,6 +31,7 @@ class CheckOutCart(NavbarUserTypeMixin, APIView):
                         item=product_obj, 
                         quntity=quntity
                     )
+                    item.save()
                     print(item)
 
                 response = Response({"status": "seccussfully"})

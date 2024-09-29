@@ -48,11 +48,6 @@ class Product(models.Model):
 
 
 
-class ProductImage(models.Model):
-    image = models.ImageField(upload_to="product/%y/%m/%d/")
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-
-
 class Property(models.Model):
     property_field = models.CharField(max_length=64)
 
@@ -113,7 +108,8 @@ class CartItems(models.Model):
     
     def save(self, *args, **kwargs):
         self.total_amount = self.item.price * self.quntity
-        self.cart.total_amount + self.total_amount
+        self.cart.total_amount += self.total_amount
+        self.cart.save()
 
     def __str__(self):
         return f"{self.cart} ~ {self.item} ~ {self.quntity} ~ {self.total_amount}"
