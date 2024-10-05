@@ -1,4 +1,5 @@
 import json
+from django.http.response import HttpResponse as HttpResponse
 from django.urls import reverse_lazy
 from rest_framework.views import APIView
 from rest_framework import generics
@@ -6,6 +7,7 @@ from rest_framework.response import Response
 from .serializer import ProductSerializer
 from cart.models import Product, Cart, CartItems
 from website.views import NavbarUserTypeMixin
+from django.views.generic.base import TemplateView
 
 
 class ProductAPIView(generics.ListAPIView):
@@ -13,32 +15,30 @@ class ProductAPIView(generics.ListAPIView):
     serializer_class = ProductSerializer
 
 
-class CheckOutCart(NavbarUserTypeMixin, APIView):
-    def get(self, request, format=None):
+class CheckOutCart(NavbarUserTypeMixin, TemplateView):
+    def get_template_names(self):
         cookie = self.request.COOKIES
         try:
             data = cookie.pop("cart")
             if data:
                 data_parse = dict(json.loads(data))
                 cart = Cart.objects.create(customer=self.request.user)
-                cart.save()
-                print(cart)
                 for product, quntity in data_parse.items():
                     product_obj = Product.objects.get(pk=int(product))
-                    print(product_obj)
                     item = CartItems.objects.create(
                         cart=cart,
                         item=product_obj, 
                         quntity=quntity
                     )
-                    item.save()
-                    print(item)
-
-                response = Response({"status": "seccussfully"})
-                for key, value in cookie.items():
-                    response.set_cookie(key, value)
-
-                return response
+                self.request.COOKIES = cookie
+                return ["thankyou.html"]
+            else:
+                ["contact.html"]
         except KeyError:
-            return Response({"status": "faild"})
-        return Response({"status": "faild"})
+            pass
+        return super().get_template_names()
+
+    def render_to_response(self, context, **response_kwargs):
+        response = super().render_to_response(context, **response_kwargs)    
+        response.delete_cookie("cart")
+        return response
