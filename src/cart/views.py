@@ -172,3 +172,16 @@ class CartHistoryView(NavbarUserTypeMixin,ListView):
                 return carts
             else:
                 return qs.filter(customer=user.user)
+
+class CartItemsView(NavbarUserTypeMixin,ListView):
+    model = CartItems
+    template_name = "cart_item.html"
+    context_object_name = "items"
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        user = self.get_user()
+        if user.user:
+            if user.is_satff:
+                return qs.select_related("item","cart").filter(cart__pk=self.kwargs.get("pk"),item__company=user.company)
+            return qs.select_related("item").filter(cart__pk=self.kwargs.get("pk"))
