@@ -33,10 +33,9 @@ class CheckOutCart(NavbarUserTypeMixin, TemplateView):
                 self.request.COOKIES = cookie
                 return ["thankyou.html"]
             else:
-                ["contact.html"]
+                return ["base.html"]
         except KeyError:
-            pass
-        return super().get_template_names()
+            return ["base.html"]
 
     def render_to_response(self, context, **response_kwargs):
         response = super().render_to_response(context, **response_kwargs)    
