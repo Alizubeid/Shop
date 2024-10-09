@@ -76,7 +76,7 @@
 
 			  <div class="row">
 				<div class="col-md-12">
-					{% if user_nav == "customer" %}
+					{% if user_nav == "customer" and products%}
 				  		<a class="btn btn-black btn-lg py-3 btn-block" href="{% url "checkout" %}">Proceed To Checkout</a>
 					{% elif user_nav == "goust" %}
 						<a class="btn btn-black btn-lg py-3 btn-block" href="{% url "login" %}">Proceed To Checkout</a>

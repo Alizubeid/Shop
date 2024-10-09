@@ -1,4 +1,5 @@
 from typing import Any
+from django.db.models.query import QuerySet
 from django.http import HttpRequest
 from django.http.response import HttpResponse
 from django.shortcuts import redirect
@@ -151,3 +152,23 @@ class ProductItemView(NavbarUserTypeMixin,ListView):
 
 class ThankYouView(NavbarUserTypeMixin,TemplateView):
     template_name = "thankyou.html"
+
+
+class CartHistoryView(NavbarUserTypeMixin,ListView):
+    model = Cart
+    template_name = "cart_history.html"
+    context_object_name = "carts"
+
+    def get_queryset(self) -> QuerySet[Any]:
+        qs = super().get_queryset()
+        user = self.get_user()
+        if user.user:
+            if user.is_satff:
+                carts=[]
+                for cart_item in CartItems.objects.filter(item__company=user.company):
+                    cart = cart_item.cart
+                    if cart not in carts:
+                        carts.append(cart)
+                return carts
+            else:
+                return qs.filter(customer=user.user)

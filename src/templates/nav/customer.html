@@ -19,6 +19,7 @@
         </a>
     </li>
     <li><a class="nav-link" href="{% url "cart" %}"><img src="{% static "images/cart.svg"%}"></a></li>
+    <li><a class="nav-link" href="{% url "history" %}"><img src="{% static "images/history.png"%}" style="width: 38px;height: 38px;"></a></li>
     <li><div class="nav-link">
         <form action="{% url "logout" %}" method="post">
             {% csrf_token %}
