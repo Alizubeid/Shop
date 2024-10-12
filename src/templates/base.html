@@ -63,14 +63,25 @@
         </div>
     </div>
 </div>
-{% if products %}
-
+{% comment %} {% if products %} {% endcomment %}
 
 <div class="untree_co-section product-section before-footer-section">
     <div class="container">
-          <div class="row">
+          <div class="row get_products">
+            {% for i in 4|times %}
+            <div class="col-12 col-md-4 col-lg-3 mb-5">
+                <div class="product-item">
+                    <div style="height: auto;width: auto;margin: 20px;">
+                    <img src="{% static "images/Loading-bar.gif" %}" class="img-fluid product-thumbnail" style="height: 240px;width: auto;object-fit: contain;">
+                    </div>
+                </div>                
+            </div>
+            {% endfor %}
+          </div>
+    </div>
+</div>
 
-             {% for product in products %}
+             {% comment %} {% for product in products %}
             <div class="col-12 col-md-4 col-lg-3 mb-5">
                 <div class="product-item">
                     <div style="height: auto;width: auto;margin: 20px;">
@@ -105,7 +116,7 @@
           </div>
     </div>
 </div>
-{% endif %}
+{% endif %} {% endcomment %}
 
 {% endblock content %}
 <!-- Start Footer Section -->
@@ -221,7 +232,7 @@
     <script src="{% static "js/tiny-slider.js"%}"></script>
     <script src="{% static "js/custom.js"%}"></script>
     <script src="{% static "js/product_add_to_card.js" %}"></script>
-    <script src="{% static "js/api.js" %}"></script>
+    {% comment %} <script src="{% static "js/api.js" %}"></script> {% endcomment %}
 
 </body>
 
