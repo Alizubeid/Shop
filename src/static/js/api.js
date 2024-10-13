@@ -22,8 +22,12 @@ let HTMLItemTags = `
 const HttpRespose = new XMLHttpRequest();
 HttpRespose.onload = function(){
     let data_parser = JSON.parse(this.responseText);
-    document.getElementsByClassName("get_products") = "";
-    
+    let items_block = document.getElementById("get_products");
+    items_block.innerHTML = "";
+    for(let item in data_parser){
+        let product = data_parser[item];
+        items_block.innerHTML += HTMLItemTags.replace("PRODUCT_ID",product["id"]).replace("PRODUCT_NAME",product["name"]).replace("PRODUCT_PRICE",product["price"]).replace("PRODUCT_IMAGE_LINK",product["image"])
+    }
 }  
 HttpRespose.open("GET","api/products/",true);
 HttpRespose.send();
