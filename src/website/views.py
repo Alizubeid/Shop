@@ -5,6 +5,7 @@ from django.urls import reverse_lazy
 from django.views.generic.list import ListView
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import UpdateView,FormView
+from django.views.generic.detail import DetailView
 from django.contrib.auth.views import LoginView
 from vendors.models import Company
 from cart.models import Product
@@ -15,6 +16,7 @@ from django_filters.views import FilterView
 from accounts.models import User
 from accounts.forms import AddressForm, ProfileForm
 from .forms import CommentForm
+from .models import Comment
 
 class NavbarUserTypeMixin(object):
     class UserType:
@@ -169,4 +171,19 @@ class ProductCommentFormView(NavbarUserTypeMixin,FormView):
         product = Product.objects.get(pk=self.kwargs.get("pk"))
         form.instance.customer = self.request.user
         form.instance.product = product
+        form.save()
         return super(ProductCommentFormView,self).form_valid(form)
+
+class ProductDetailView(NavbarUserTypeMixin,DetailView):
+    model = Product
+    template_name = "products/product_detail_view.html"
+    context_object_name = "product"
+
+
+
+    def get_context_data(self, **kwargs):
+        context = super(ProductDetailView,self).get_context_data(**kwargs)
+        comments = Comment.objects.select_related("customer").filter(product=self.object)
+        context["comments"] = comments
+        context["count"] = comments.count()
+        return context

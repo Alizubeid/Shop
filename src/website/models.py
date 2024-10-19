@@ -13,8 +13,9 @@ class Comment(models.Model):
     )
     comment = models.TextField()
     score = models.CharField(max_length=4,choices=SCORE,default="0")
-    customer = models.ForeignKey(Customer,on_delete=models.DO_NOTHING)
+    customer = models.ForeignKey(Customer,on_delete=models.DO_NOTHING,related_name="customer")
     product = models.ForeignKey(Product,on_delete=models.DO_NOTHING)
+    date = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name =  "کامنت"

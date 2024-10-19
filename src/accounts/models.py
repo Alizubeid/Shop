@@ -100,7 +100,7 @@ class Profile(models.Model):
     age_category = models.CharField(
         max_length=1, choices=Demography.AgeCategory.choices, blank=True
     )
-    user = models.OneToOneField(User, on_delete=models.CASCADE, unique=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, unique=True,related_name="profile")
 
     def save(self, *args, **kwargs):
         self.user_age = self._age
