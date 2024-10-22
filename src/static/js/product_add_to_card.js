@@ -14,7 +14,7 @@ function getCookie(cname) {
     return "";
 }
 function setCookie(cname, cvalue) {
-    document.cookie = cname + "=" + cvalue + ";";
+    document.cookie = cname + "=" + cvalue + "; path=/;" ;
 }
 
 function addToCard(Product_ID){

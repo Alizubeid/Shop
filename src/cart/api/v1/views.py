@@ -35,7 +35,7 @@ class CartItemsView(NavbarUserTypeMixin,generics.ListAPIView):
                 return qs.filter(pk__in=items)
         except KeyError:
             pass
-    
+
 
 
 

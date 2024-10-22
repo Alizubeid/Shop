@@ -11,7 +11,7 @@ from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic import RedirectView
 from vendors.models import Company, Companies, Staff
 from website.views import NavbarUserTypeMixin
-from .forms import AddProductForm, DiscountCategoryForm, DiscountProductForm
+from .forms import AddProductForm, DiscountCategoryForm, DiscountProductForm,StatusProductView
 from django.views.generic.edit import FormView
 import json
 
@@ -185,3 +185,9 @@ class CartItemsView(NavbarUserTypeMixin,ListView):
             if user.is_satff:
                 return qs.select_related("item","cart").filter(cart__pk=self.kwargs.get("pk"),item__company=user.company)
             return qs.select_related("item").filter(cart__pk=self.kwargs.get("pk"))
+        
+class UpdateStatusCartItem(NavbarUserTypeMixin,UpdateView):
+    template_name = "products/change_status.html"
+    form_class = StatusProductView
+    model = CartItems
+    success_url = reverse_lazy("root")
