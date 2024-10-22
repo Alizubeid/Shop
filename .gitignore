@@ -1,5 +1,6 @@
 .venv/
-__pycache__/
+*__pycache__/
 *migrations/
 .gitignore
-db.sqlite3
+*db.sqlite3
+clear_migrations.sh

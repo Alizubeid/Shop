@@ -1,4 +1,5 @@
 from typing import Any
+from django.db.models.query import QuerySet
 from django.http import HttpRequest
 from django.http.response import HttpResponse
 from django.shortcuts import redirect
@@ -10,7 +11,7 @@ from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic import RedirectView
 from vendors.models import Company, Companies, Staff
 from website.views import NavbarUserTypeMixin
-from .forms import AddProductForm, DiscountCategoryForm, DiscountProductForm
+from .forms import AddProductForm, DiscountCategoryForm, DiscountProductForm,StatusProductView
 from django.views.generic.edit import FormView
 import json
 
@@ -151,3 +152,42 @@ class ProductItemView(NavbarUserTypeMixin,ListView):
 
 class ThankYouView(NavbarUserTypeMixin,TemplateView):
     template_name = "thankyou.html"
+
+
+class CartHistoryView(NavbarUserTypeMixin,ListView):
+    model = Cart
+    template_name = "cart_history.html"
+    context_object_name = "carts"
+
+    def get_queryset(self) -> QuerySet[Any]:
+        qs = super().get_queryset()
+        user = self.get_user()
+        if user.user:
+            if user.is_satff:
+                carts=[]
+                for cart_item in CartItems.objects.filter(item__company=user.company):
+                    cart = cart_item.cart
+                    if cart not in carts:
+                        carts.append(cart)
+                return carts
+            else:
+                return qs.filter(customer=user.user)
+
+class CartItemsView(NavbarUserTypeMixin,ListView):
+    model = CartItems
+    template_name = "cart_item.html"
+    context_object_name = "items"
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        user = self.get_user()
+        if user.user:
+            if user.is_satff:
+                return qs.select_related("item","cart").filter(cart__pk=self.kwargs.get("pk"),item__company=user.company)
+            return qs.select_related("item").filter(cart__pk=self.kwargs.get("pk"))
+        
+class UpdateStatusCartItem(NavbarUserTypeMixin,UpdateView):
+    template_name = "products/change_status.html"
+    form_class = StatusProductView
+    model = CartItems
+    success_url = reverse_lazy("root")

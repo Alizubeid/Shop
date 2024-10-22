@@ -27,7 +27,7 @@ class Product(models.Model):
     name = models.CharField(max_length=64)
     image = models.ImageField(null=True, upload_to=f"products/%y/%m/%d/{name}")
     price = models.PositiveIntegerField()
-    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE,related_name="product_company")
     category = models.ManyToManyField(Category)
 
 
@@ -65,6 +65,8 @@ class ProductProperties(models.Model):
 
 
 class Discount(models.Model):
+
+
     product = models.ForeignKey(
         Product, on_delete=models.CASCADE, null=True, blank=True
     )
@@ -74,6 +76,7 @@ class Discount(models.Model):
     company = models.ForeignKey(Company,on_delete=models.CASCADE)
     amount = models.PositiveIntegerField(default=0,null=True)
     percent = models.PositiveIntegerField(default=0,null=True)
+
     
     def __str__(self):
         return f"{self.product.name or self.category.category} - {f'{self.amount}$' if self.amount else f'{self.percent}%' if {self.percent} else ''}"
@@ -100,10 +103,17 @@ class Cart(models.Model):
 
 
 class CartItems(models.Model):
-    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
-    item = models.ForeignKey(Product, on_delete=models.CASCADE)
+    STATUS = (
+        ("INPROGRESS","INPROGRESS"),
+        ("CONFIRMED","CONFIRMED"),
+        ("SENT","SENT")
+    )
+
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE,related_name="cart")
+    item = models.ForeignKey(Product, on_delete=models.CASCADE,related_name="product_item")
     quntity = models.PositiveIntegerField(default=0,null=True)
     total_amount = models.PositiveIntegerField(default=0,null=True)
+    status = models.CharField(max_length=64,choices=STATUS,default="INPROGRESS")
     
     def save(self, *args, **kwargs):
         self.total_amount = (self.item.price * self.quntity)

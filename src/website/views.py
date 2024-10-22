@@ -4,8 +4,9 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic.list import ListView
 from django.views.generic.base import TemplateView
-from django.views.generic.edit import UpdateView
-from django.contrib.auth.views import LoginView, LogoutView
+from django.views.generic.edit import UpdateView,FormView
+from django.views.generic.detail import DetailView
+from django.contrib.auth.views import LoginView
 from vendors.models import Company
 from cart.models import Product
 from vendors.models import Staff
@@ -14,6 +15,8 @@ from .utils import ProductFilter
 from django_filters.views import FilterView
 from accounts.models import User
 from accounts.forms import AddressForm, ProfileForm
+from .forms import CommentForm
+from .models import Comment
 
 class NavbarUserTypeMixin(object):
     class UserType:
@@ -77,7 +80,7 @@ class NavbarUserTypeMixin(object):
         return self.UserType(self.request.user).validate()
     
     def get_context_data(self, **kwargs):
-        context = super(NavbarUserTypeMixin, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         user = self.get_user()
         context["user_nav"], context["user_image"] = user.user_type, user.image
         return context
@@ -105,7 +108,6 @@ class ProductListView(NavbarUserTypeMixin, FilterView):
             return user.products
         else:
             return qs
-        
 
 
 class ProductCompanyListView(NavbarUserTypeMixin, ListView):
@@ -155,3 +157,33 @@ class AddressUserUpdateView(NavbarUserTypeMixin, UpdateView):
 
     def get_object(self):
         return Address.objects.get(user=self.request.user)
+
+class ProductCommentFormView(NavbarUserTypeMixin,FormView):
+    template_name = "products/comment.html"
+    form_class = CommentForm
+    success_url = reverse_lazy("root") 
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context["product"] = Product.objects.get(pk=self.kwargs.get("pk"))
+    #     return context
+    
+    def form_valid(self, form):
+        product = Product.objects.get(pk=self.kwargs.get("pk"))
+        form.instance.customer = self.request.user
+        form.instance.product = product
+        form.save()
+        return super(ProductCommentFormView,self).form_valid(form)
+
+class ProductDetailView(NavbarUserTypeMixin,DetailView):
+    model = Product
+    template_name = "products/product_detail_view.html"
+    context_object_name = "product"
+
+
+
+    def get_context_data(self, **kwargs):
+        context = super(ProductDetailView,self).get_context_data(**kwargs)
+        comments = Comment.objects.select_related("customer").filter(product=self.object)
+        context["comments"] = comments
+        context["count"] = comments.count()
+        return context

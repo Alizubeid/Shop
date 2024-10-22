@@ -1,6 +1,6 @@
 from typing import Any
 from django import forms
-from .models import Category, Product,Discount
+from .models import CartItems, Category, Product,Discount
 from website.views import NavbarUserTypeMixin
 
 
@@ -32,3 +32,7 @@ class DiscountCategoryForm(DiscountType):
     pass
 
 
+class StatusProductView(forms.ModelForm):
+    class Meta:
+        model = CartItems
+        fields = ["status"]

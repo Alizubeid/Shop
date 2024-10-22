@@ -1,0 +1,17 @@
+{% extends "register/main_register_form.html" %}
+{% block register_model %}
+<div class="form-left">
+    <h2>Product Status</h2>
+    <div class="form-group">
+        <div class="form-row form-row-1">
+          <h3>Status</h3>
+        </div>
+        <div class="form-row form-row-2">
+            {{form.status}}
+        </div>
+    </div>
+    <div class="form-row-last">
+        <input type="submit" name="register" class="register" value="Change Status">
+      </div>
+</div>
+{% endblock register_model %}

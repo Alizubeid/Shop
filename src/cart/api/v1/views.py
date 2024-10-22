@@ -8,11 +8,35 @@ from .serializer import ProductSerializer
 from cart.models import Product, Cart, CartItems
 from website.views import NavbarUserTypeMixin
 from django.views.generic.base import TemplateView
+from website.views import NavbarUserTypeMixin
 
 
-class ProductAPIView(generics.ListAPIView):
-    queryset = Product.objects.all()
+class ProductAPIView(NavbarUserTypeMixin,generics.ListAPIView):
     serializer_class = ProductSerializer
+
+    def get_queryset(self):
+        qs = Product.objects.all()
+        user = self.get_user()
+        if user.is_satff:
+            return qs.filter(company=user.company)
+        return qs
+
+class CartItemsView(NavbarUserTypeMixin,generics.ListAPIView):
+    serializer_class = ProductSerializer
+
+    def get_queryset(self):
+        qs = Product.objects.all()
+        cookie = self.request.COOKIES
+        try:
+            data = cookie.pop("cart")
+            if data:
+                data_parse = dict(json.loads(data))
+                items = [int(product_id) for product_id,product_quntity in data_parse.items()]
+                return qs.filter(pk__in=items)
+        except KeyError:
+            pass
+
+
 
 
 class CheckOutCart(NavbarUserTypeMixin, TemplateView):
@@ -33,10 +57,9 @@ class CheckOutCart(NavbarUserTypeMixin, TemplateView):
                 self.request.COOKIES = cookie
                 return ["thankyou.html"]
             else:
-                ["contact.html"]
+                return ["base.html"]
         except KeyError:
-            pass
-        return super().get_template_names()
+            return ["base.html"]
 
     def render_to_response(self, context, **response_kwargs):
         response = super().render_to_response(context, **response_kwargs)    

@@ -7,7 +7,9 @@ from .views import (
     UserLoginView,
     ProfileUserView,
     ProfileUserUpdateView,
-    AddressUserUpdateView
+    AddressUserUpdateView,
+    ProductCommentFormView,
+    ProductDetailView
 )
 from django.views.generic.base import TemplateView
 
@@ -24,4 +26,6 @@ urlpatterns = [
     path("profile/", ProfileUserView.as_view(), name="profile"),
     path("profile/edit/",ProfileUserUpdateView.as_view(),name="update_profile"),
     path("address/edit/",AddressUserUpdateView.as_view(),name="update_address"),
+    path("<int:pk>/comment/",ProductCommentFormView.as_view(),name="comment"),
+    path("<pk>/product/",ProductDetailView.as_view(),name="product-detail")
 ]

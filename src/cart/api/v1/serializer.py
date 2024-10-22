@@ -9,9 +9,7 @@ class CategorySerilizer(serializers.ModelSerializer):
 
 
 class ProductSerializer(serializers.ModelSerializer):
-    discount = serializers.CharField()
-    add_cart = serializers.URLField()
 
     class Meta:
         model = Product
-        fields = ["name","price","add_cart","discount"]
+        fields = "__all__"

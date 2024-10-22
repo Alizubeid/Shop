@@ -1,0 +1,27 @@
+{% extends "register/main_register_form.html" %}
+{% block register_model %}
+<div class="form-left">
+    <h2>Product Comment</h2>
+    <div class="form-group">
+        <div class="form-row form-row-1">
+          <h3>Score</h3>
+        </div>
+        <div class="form-row form-row-2">
+            {{form.score}}
+        </div>
+    </div>
+</div>
+<div class="form-right">
+    <div class="form-group">
+        <div class="form-row form-row-1">
+          <h3 style="color : white;">Comment</h3>
+        </div>
+        <div class="form-row form-row-2">
+            {{form.comment}}
+        </div>
+    </div>
+    <div class="form-row-last">
+        <input type="submit" name="register" class="register" value="Save Comment">
+      </div>
+</div>
+{% endblock register_model %}

@@ -14,7 +14,7 @@ function getCookie(cname) {
     return "";
 }
 function setCookie(cname, cvalue) {
-    document.cookie = cname + "=" + cvalue + ";";
+    document.cookie = cname + "=" + cvalue + "; path=/;" ;
 }
 
 function addToCard(Product_ID){
@@ -72,11 +72,16 @@ let cart = getCookie("cart");
 let data = JSON.parse(cart);
 if (cart != "" ){
     for (var product in data){
-        document.getElementById(`product_${product}`).value = data[product];
-        let price = document.getElementById(`product_${product}_amount`).innerHTML;
-        let total = document.getElementById(`product_${product}`).value * price;
-        document.getElementById(`product_${product}_total`).innerHTML = total;
-        document.getElementById("total_match").innerHTML = Number(document.getElementById("total_match").innerHTML) + total;
+        try{
+            document.getElementById(`product_${product}`).value = data[product];
+            let price = document.getElementById(`product_${product}_amount`).innerHTML;
+            let total = document.getElementById(`product_${product}`).value * price;
+            document.getElementById(`product_${product}_total`).innerHTML = total;
+            document.getElementById("total_match").innerHTML = Number(document.getElementById("total_match").innerHTML) + total;
+        }
+        catch(err){
+            
+        }
         
     }
 }
