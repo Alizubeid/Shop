@@ -1,6 +1,0 @@
-.venv/
-src/**/__pycache__/
-src/**/migrations/
-.gitignore
-src/db.sqlite3
-./clear_migrations.sh
